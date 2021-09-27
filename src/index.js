@@ -13,6 +13,9 @@ function num_format(x) {
   if (isNaN(x) || !isFinite(x)) {
     return '';
   }
+  if (Math.abs(x) >= 1e8) {
+    return x.toExponential(2)
+  }
   return (x < 0 ? '-' : '')+Math.floor(Math.abs(x.toFixed(2))).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + (Math.abs(x)%1).toFixed(2).replace(/0*$/,'').replace(/\.$/,'').substr(1)
 }
 
