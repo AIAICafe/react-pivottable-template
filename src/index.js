@@ -7,6 +7,22 @@ import Plot from 'react-plotly.js'
 import createPlotlyRenderers from 'react-pivottable/PlotlyRenderers'
 import {aggregators, aggregatorTemplates} from 'react-pivottable/Utilities'
 
+function returnsColorScaleGenerator(values) {
+  var min = Math.min.apply(Math, values);
+  var max = Math.max.apply(Math, values);
+  return function (x) {
+    if (x > 0) {
+      let nonGreen = 255 - Math.round(255 * x / max)
+      return {backgroundColor: 'rgb(' + nonGreen + ',255,' + nonGreen + ')'}
+    } else if (x < 0) {
+      var nonRed = 255 - Math.round(255 * x / min)
+      return {backgroundColor: 'rgb(255,' + nonRed + ',' + nonRed + ')' }
+    } else {
+      return {}
+    }
+  }
+}
+
 const renderers = Object.assign({}, TableRenderers, createPlotlyRenderers(Plot))
 
 function num_format(x) {
@@ -52,6 +68,7 @@ class App extends React.Component
       <PivotTableUI
         onChange={s => this.setState(s)}
         renderers={renderers}
+        tableColorScaleGenerator={returnsColorScaleGenerator}
         {...this.state}
       />
     )
